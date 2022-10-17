@@ -1,8 +1,19 @@
-#MainContainer{
-    display: flex;
-    flex-direction: row;
-    padding: 20px;
+#MainContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
 }
-a{
-    margin:20px;
+a {
+  margin: 20px;
+  border: 2px solid black;
+  padding: 16px;
+  border-radius: 13px;
+  text-decoration: none;
+  color: blue;
+}
+a:hover{
+    background-color: burlywood;
+    color: black;
 }

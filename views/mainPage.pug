@@ -9,6 +9,6 @@ html(lang="en")
         script(src="/scripts/mainPage.js") 
     body
         div#MainContainer
-            a(href = "/login", onclick="myFunction()") Click here to get Artists 
-            input(type="text", name="id", id="id")
-            a(href = "/login", onclick="myFunction()") Click here to get data related to artist
+            a(href = "/login", onclick="getArtist()") Click here to get Artists 
+            input(type="text", name="id", id="id" style="width: 250px;height: 54px;font-size: 30px;")
+            a(href = "/login", onclick="getdata()") Click here to get data related to artist

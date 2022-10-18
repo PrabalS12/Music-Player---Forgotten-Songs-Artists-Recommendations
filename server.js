@@ -7,8 +7,8 @@ const path = require("path");
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
 var fs = require("fs");
+var { addArtist, addSong } = require("./dbms");
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 
@@ -22,7 +22,7 @@ app.set("views", path.join(__dirname, "views"));
 
 var client_id = "d4397edcd2614ae293f8b75da49da9e8"; // Your client id
 var client_secret = "e1bd6ab576a6474e8019f98ee2fa549c"; // Your secret
-var redirect_uri = "http://localhost:8080/callback"; // Your redirect uri
+var redirect_uri = "http://localhost:8080/hitPlaylist"; // Your redirect uri
 
 var stateKey = "spotify_auth_state";
 
@@ -46,7 +46,7 @@ var generateRandomString = function (length) {
   return text;
 };
 
-app.get("/login", function (req, res) {
+app.get("/getArtistId", function (req, res) {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
   // your application requests authorization
@@ -63,7 +63,7 @@ app.get("/login", function (req, res) {
   );
 });
 
-app.get("/callback", function (req, res) {
+app.get("/hitPlaylist", function (req, res) {
   // your application requests refresh and access tokens
   // after checking the state parameter
 
@@ -95,7 +95,7 @@ app.get("/callback", function (req, res) {
       json: true,
     };
 
-    request.post(authOptions, function (error, response, body) {
+    request.post(authOptions,  function (error, response, body) {
       if (!error && response.statusCode === 200) {
         var access_token = body.access_token,
           refresh_token = body.refresh_token;
@@ -105,7 +105,7 @@ app.get("/callback", function (req, res) {
           headers: { Authorization: "Bearer " + access_token, mode: "cors" },
           json: true,
         };
-        console.log("\nThe URL is ->" + options.url);
+        res.clearCookie("url");
         // use the access token to access the Spotify Web API
         request.get(options, function (error, response, body) {
           /**
@@ -120,22 +120,27 @@ app.get("/callback", function (req, res) {
            *                 artists:[{
            *
            *                 },{}]
-           *             }
-           *         },{}]
-           *     }
+           *              }
+           *          },{}]
+           *      }
            * }
            */
-          const table = new Set();
-          body.tracks.items.forEach((element) => {
-            element.track.artists.forEach((artist) => {
-              table.add(artist.id);
+            const table = new Set();
+            body.tracks.items.forEach((element) => {
+              element.track.artists.forEach((artist) => {
+                table.add(artist.id);
+              });
             });
-          });
-          for (const items of table) {
-            fs.appendFile("./contentFiles/artist.txt", items + "\n", (err) => {
-              if (err) throw err;
-            });
-          }
+            for (const items of table) {
+              count++;
+              options.url=`https://api.spotify.com/v1/artists/${items}`;
+              request.get(options, function (error, response, body){
+                fs.appendFile("./contentFiles/artistInfo2.json", JSON.stringify(body) + "\n", (err) => {
+                  if (err) throw err;
+                });
+              })
+            }
+
         });
 
         // we can also pass the token to the browser to make requests from there
@@ -157,6 +162,8 @@ app.get("/callback", function (req, res) {
     });
   }
 });
+
+
 app.get("/refresh_token", function (req, res) {
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
@@ -183,5 +190,11 @@ app.get("/refresh_token", function (req, res) {
     }
   });
 });
-app.post("/postRequest");
+
+app.post("/testing", (req, res) => {
+  console.log("working");
+  addArtist();
+  res.send("working");
+});
+
 app.listen(port, () => console.log("The application has started successfully"));

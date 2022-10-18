@@ -16,4 +16,5 @@ a {
 a:hover{
     background-color: burlywood;
     color: black;
+    cursor: pointer;
 }

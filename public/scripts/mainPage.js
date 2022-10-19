@@ -3,7 +3,7 @@ function getArtist() {
   document.cookie = `url=${text.value}`;
 }
 function getData() {
-  fetch("http://localhost:8080/testing", {
+  fetch("http://localhost:8080/addSongs", {
     method: "POST",
     mode: 'cors',
     credentials: 'same-origin',

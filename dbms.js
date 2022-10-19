@@ -1,18 +1,19 @@
 var mysql =require("mysql");
 var creds=require("./creds.json")
 module.exports={
-    addArtist:function(){
+    addArtist:function(Artistname,id,popularity,genre){
         var con=mysql.createConnection(creds);
         con.connect((err)=>{
             if(err) throw err;
-            console.log("Connected!!")
             con.query("use musicDatabase",(err,result)=>{
                 if(err) throw err;
-                console.log(result);
+            })
+            con.query(`CALL insertArtist("${Artistname}","${id}","${popularity}","${genre}")`,(err,result)=>{
+                if(err) throw err;
             })
         })
     },
     addSong:function(){
-        
+
     }
 }

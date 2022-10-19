@@ -20,9 +20,7 @@ app
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-var client_id = "d4397edcd2614ae293f8b75da49da9e8"; // Your client id
-var client_secret = "e1bd6ab576a6474e8019f98ee2fa549c"; // Your secret
-var redirect_uri = "http://localhost:8080/hitPlaylist"; // Your redirect uri
+
 
 var stateKey = "spotify_auth_state";
 
@@ -132,12 +130,9 @@ app.get("/hitPlaylist", function (req, res) {
               });
             });
             for (const items of table) {
-              count++;
               options.url=`https://api.spotify.com/v1/artists/${items}`;
               request.get(options, function (error, response, body){
-                fs.appendFile("./contentFiles/artistInfo2.json", JSON.stringify(body) + "\n", (err) => {
-                  if (err) throw err;
-                });
+                addArtist(body.name,body.id,body.popularity,body.genres)
               })
             }
 
@@ -191,10 +186,8 @@ app.get("/refresh_token", function (req, res) {
   });
 });
 
-app.post("/testing", (req, res) => {
-  console.log("working");
-  addArtist();
-  res.send("working");
+app.post("/addSongs", (req, res) => {
+  addSong();
 });
 
 app.listen(port, () => console.log("The application has started successfully"));

@@ -2,7 +2,7 @@ var mysql =require("mysql");
 var creds=require("./creds.json")
 module.exports={
     addArtist:function(Artistname,id,popularity,genre){
-        var con=mysql.createConnection(creds);
+        var con=mysql.createConnection(creds.sql);
         con.connect((err)=>{
             if(err) throw err;
             con.query("use musicDatabase",(err,result)=>{
@@ -14,6 +14,6 @@ module.exports={
         })
     },
     addSong:function(){
-
+        
     }
 }

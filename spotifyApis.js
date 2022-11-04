@@ -4,10 +4,6 @@ var request = require("request");
 var querystring = require("querystring");
 var { addArtist, addSong } = require("./dbms");
 
-
-var redirect_uri = "http://localhost:8080/hitPlaylist"; // Your redirect uri
-
-
 var generateRandomString = function (length) {
   var text = "";
   var possible =
@@ -22,7 +18,7 @@ var generateRandomString = function (length) {
 var stateKey = "spotify_auth_state";
 
 module.exports = {
-  getAuth: function (req, res) {
+  getAuth: function (req, res, redirect_uri) {
     var state = generateRandomString(16);
     res.cookie(stateKey, state);
     // your application requests authorization
@@ -38,7 +34,7 @@ module.exports = {
         })
     );
   },
-  playlist: function (req, res) {
+  playlist: function (req, res, redirect_uri) {
     // your application requests refresh and access tokens
     // after checking the state parameter
 
@@ -102,16 +98,43 @@ module.exports = {
              *      }
              * }
              */
+
+						//get unique artist only
             const table = new Set();
+            const tableImage=new Set();
             body.tracks.items.forEach((element) => {
               element.track.artists.forEach((artist) => {
                 table.add(artist.id);
               });
             });
+            
+            
+						//get artist detail
             for (const items of table) {
               options.url = `https://api.spotify.com/v1/artists/${items}`;
-              request.get(options, function (error, response, body) {
-                addArtist(body.name, body.id, body.popularity, body.genres);
+              request.get(options, function (error, response, body1) {
+                
+                var artistImg=body1.images[0].url;
+								//get Albums
+
+								options.url = `https://api.spotify.com/v1/artists/${body1.id}/albums?market=IN&limit=2&offset=0`;
+								request.get(options,function(error,response,body2){
+								
+									//for each album 
+									body2.items.forEach(albums=>{
+										var date=new Date(albums.release_date);
+                    var table;
+                    if(date.getFullYear()>2010) table="T10s";
+                    else if(date.getFullYear()<2010&&date.getFullYear()>2000) table="T00s"; 
+                    else if(date.getFullYear()<2000&&date.getFullYear()>1990) table="T90s"; 
+                    else if(date.getFullYear()<1990&&date.getFullYear()>1980) table="T80s"; 
+                    else if(date.getFullYear()<1980&&date.getFullYear()>1970) table="T70s";
+                    else table="retro";
+
+                    addArtist(table,body1.id,body1.name, artistImg, body1.genres,body1.popularity,albums.id,albums.name,albums.images[0].url,albums.release_date);
+
+									})
+								})
               });
             }
           });

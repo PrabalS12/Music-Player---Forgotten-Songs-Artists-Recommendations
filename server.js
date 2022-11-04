@@ -9,6 +9,7 @@ var { addArtist, addSong } = require("./dbms");
 
 var {getAuth,playlist,refreshToken} =require("./spotifyApis")
 
+var redirect_uri = "http://localhost:8080/hitPlaylist"; // Your redirect uri
 
 
 app.use(express.json());
@@ -22,25 +23,13 @@ app
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-
-
-
-
-
 app.get("/", (req, res) => {
   res.status(200).render("mainPage");
 });
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
 
+app.get("/getArtistId",(req,res)=>getAuth(req,res,redirect_uri));
 
-
-app.get("/getArtistId",(req,res)=>getAuth(req,res));
-
-app.get("/hitPlaylist",(req,res)=>playlist(req,res));
+app.get("/hitPlaylist",(req,res)=>playlist(req,res,redirect_uri));
 
 app.get("/refresh_token", (req,res)=>refreshToken(req,res));
 

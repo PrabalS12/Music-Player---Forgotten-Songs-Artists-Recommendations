@@ -3,3 +3,5 @@
 /contentFiles
 /creds.json
 frontend/package-lock.json
+acousticFeatures.csv
+backend/package-lock.json

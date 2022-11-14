@@ -273,12 +273,12 @@ module.exports = {
           headers: { Authorization: "Bearer " + access_token, mode: "cors" },
           json: true,
         };
-        fs.readFileSync("./contentFiles/albumsList.txt", "utf-8")
+        fs.readFileSync("./dataset.csv", "utf-8")
           .split(/\r?\n/)
           .forEach((line, i) => {
             setTimeout(() => {
               if (line != "") {
-                options.url = `https://api.spotify.com/v1/albums/${line}/tracks?market=IN&limit=3&offset=0`;
+                options.url = `https://api.spotify.com/v1/albums/${line}/tracks?market=IN&limit=50&offset=0`;
                 request.get(options, (error, response, body3) => {
                   if (error){
                     console.log(typeof(error));
@@ -286,6 +286,8 @@ module.exports = {
                         console.log(`${k}: ${error[k]}`)
                     }
                   }
+                  try{
+
                   body3.items.forEach(async (songs, j) => {
                     // Songs Information
                     options.url = `https://api.spotify.com/v1/tracks/${songs.id}?market=IN`;
@@ -296,17 +298,27 @@ module.exports = {
                             console.log(`${k}: ${error[k]}`)
                         }
                       }
-                      body4.artists.forEach((item) => {
-                        addSong(
-                          body4.id,
-                          body4.name,
-                          item.id,
-                          body4.popularity,
-                          body4.href
-                        );
-                      });
-                    });
-                    //Get Acoustic Features
+                      try{
+
+                        body4.artists.forEach((item) => {
+                          addSong(
+                            body4.id,
+                            body4.name,
+                            item.id,
+                            body4.popularity,
+                            body4.href
+                            );
+                          });
+                        }catch(error){
+                          console.log(typeof(error));
+                        for(var k in error){
+                            console.log(`${k}: ${error[k]}`)
+                        }
+                        }
+                        });
+                        //Get Acoustic Features
+                        try{
+
                     setTimeout(() => {
                       options.url = `https://api.spotify.com/v1/audio-features/${songs.id}`;
                       request.get(options, function (err, response, body5) {
@@ -327,7 +339,19 @@ module.exports = {
                         );
                       });
                     }, 100 * j);
+                  }catch(error){
+                    console.log(typeof(error));
+                        for(var k in error){
+                            console.log(`${k}: ${error[k]}`)
+                        }
+                  }
                   });
+                }catch(error){
+                  console.log(typeof(error));
+                  for(var k in error){
+                      console.log(`${k}: ${error[k]}`)
+                  }
+                }
                 });
               }
             }, 500 * i);

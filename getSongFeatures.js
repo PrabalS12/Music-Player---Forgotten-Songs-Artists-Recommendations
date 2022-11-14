@@ -10,12 +10,29 @@ con.query("use musicDatabase", (err, result) => {
     if (err) throw err;
 });
 
+// let columns = {
+//   danceability:`danceability`,
+//   energy:`energy`,
+//   skey:`skey`,
+//   loudness:`loudness`,
+//   smode:`smode`,
+//   speechiness:`speechiness`,
+//   acousticness:`acousticness`,
+//   instrumentalness:`instrumentalness`,
+//   liveness:`liveness`,
+//   valence:`valence`,
+//   tempo:`tempo`,
+//   stype:`stype`,
+//   songId:`songId`
+// };
+
 let columns = {
   songId:`songID`,
   songName:`songName`,
   artistId:`artistId`,
   popularity:`popularity`,
   track_href:`track_href`,
+
 };
 
 
@@ -29,4 +46,5 @@ con.query(queryVar,(err,res)=>{
         console.log('saved.');
       });
     });
+    console.log(res)
 })

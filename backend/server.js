@@ -24,26 +24,35 @@ app.post("/getGenre", (req, res) => {
     var list2 = [];
     result.forEach((element) => {
       list = element.genre.split(",");
-      list2.push(
-        { 
-            genre: list[0], 
-            albumIMG: element.albumIMG 
-        }
-        );
+      list2.push({
+        genre: list[0],
+        albumIMG: element.albumIMG,
+      });
     });
     res.send(list2);
   });
 });
 
-app.post("/getArtists",(req,res)=>{
-    console.log("Get Artists!");
-    var con = mysql.createConnection(creds.sql);
-    con.query("use musicDatabase");
+app.post("/getArtists", (req, res) => {
+  console.log("Get Artists!");
+  var con = mysql.createConnection(creds.sql);
+  con.query("use musicDatabase");
 
-    // get All artists containing genre from their list of genres
-    const queryParam=`select * from ${req.body.year} where genre like "%${req.body.genre}%"`
-    con.query(queryParam,(err,result)=>{
-        res.send(result);
-    })
-})
+  // get All artists containing genre from their list of genres
+  const queryParam = `select * from ${req.body.year} where genre like "%${req.body.genre}%"`;
+  con.query(queryParam, (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post("/getSongs", (req, res) => {
+  console.log("Get Songs!");
+  var con = mysql.createConnection(creds.sql);
+  con.query("use musicDatabase");
+  const queryParam = `select DISTINCT * from songs where artistId="${req.body.ArtistId}"`;
+  con.query(queryParam,(err,result)=>{
+    res.send(result);
+  })
+});
+
 app.listen(port, () => console.log("The application has started successfully"));

@@ -2,6 +2,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Artist from "./components/artist/Artist";
 import Albums from "./components/decades/Decades";
 import Genre from "./components/Genre/Genre";
+import Songs from "./components/songs/Songs";
 
 function App() {
   return (
@@ -10,15 +11,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Albums />} />
           <Route path="/genre" element={<Genre />} />
-          <Route
-            path="/artists"
-            element={
-              <>
-                <Artist />
-              </>
-            }
-          />
+          <Route path="/artists" element={<Artist />}/>
+          <Route path="/songs" element={<Songs/>}/>
         </Routes>
+
       </BrowserRouter>
     </>
   );

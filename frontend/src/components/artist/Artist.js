@@ -43,7 +43,7 @@ function Artist() {
   }, []);
   return (
     <>
-        <div id="mainGenreContainer" style={{display:"flex",flexWrap:"wrap",justifyContent:"center",alignContent:"center",height:"100%"}} >
+        <div id="mainGenreContainer" style={{display:"flex",flexWrap:"wrap",justifyContent:"center",alignContent:"center"}} >
         {listArtist.map((element, i) => {
           return (
             <>

@@ -5,25 +5,17 @@ var {stringify} = require('csv-stringify');
     
 var con = mysql.createConnection(creds.sql);
 
-var queryVar=`select * from songFeature`
+var queryVar=`select * from songs`
 con.query("use musicDatabase", (err, result) => {
     if (err) throw err;
 });
 
 let columns = {
-  danceability:`danceability`,
-  energy:`energy`,
-  skey:`skey`,
-  loudness:`loudness`,
-  smode:`smode`,
-  speechiness:`speechiness`,
-  acousticness:`acousticness`,
-  instrumentalness:`instrumentalness`,
-  liveness:`liveness`,
-  valence:`valence`,
-  tempo:`tempo`,
-  stype:`stype`,
-  songId:`songId`
+  songId:`songID`,
+  songName:`songName`,
+  artistId:`artistId`,
+  popularity:`popularity`,
+  track_href:`track_href`,
 };
 
 
@@ -32,10 +24,9 @@ con.query(queryVar,(err,res)=>{
     if(err) throw err;
     stringify(res, { header: true, columns: columns }, (err, output) => {
       if (err) throw err;
-      fs.writeFile('acousticFeatures.csv', output, (err) => {
+      fs.writeFile('songs.csv', output, (err) => {
         if (err) throw err;
         console.log('saved.');
       });
     });
-    console.log(res)
 })

@@ -13,10 +13,14 @@ import "../decades/albums.css";
 //   "releasedDate": "Wed Sep 22 2021"
 // },
 
+function getArtists(genre){
+  document.cookie=`genre=${genre}`
+  window.location = "/artists";  
+}
 function GenreItems(props) {
   return (
     <>
-      <div className="cardButton" name={props.decade} style={{height:"15vw"}}>
+      <div className="cardButton" name={props.decade} style={{height:"15vw"}} onClick={()=>getArtists(props.Genre)}>
         <div className="imageContainer">
           <img src={props.imgUrl} className="imageClass" alt={props.decade} />
         </div>

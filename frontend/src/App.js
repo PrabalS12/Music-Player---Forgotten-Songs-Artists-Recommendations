@@ -1,5 +1,5 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Artist from "./components/artist/artist";
+import Artist from "./components/artist/Artist";
 import Albums from "./components/decades/Decades";
 import Genre from "./components/Genre/Genre";
 

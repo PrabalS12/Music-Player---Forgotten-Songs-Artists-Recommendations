@@ -1,26 +1,26 @@
 import { React, useEffect,useState } from "react";
 import GenreItems from "./GenreItems";
 import Cookies from 'universal-cookie';
+import "../decades/albums.css";
+
 
 function containsObject(obj, list) {
   var i;
   for (i = 0; i < list.length; i++) {
       if (list[i].genre === obj.genre) {
-          return false;
+          return true;
       }
   }
-  return true
+  return false
 }
 
 function Genre() {
+  const cookie=new Cookies();
   const [listGenre,changeGenre]=useState([]);
-  const cookie=new Cookies;
   useEffect(() => {
     var temp=[]
     var temp2=[]
     async function getInfo(){
-  
-      console.log("working");
       var url = "/getGenre";
       const response = await fetch(url, {
         method: "POST",
@@ -34,7 +34,7 @@ function Genre() {
       temp=json;
       temp.forEach(element => {
         var genreObject={genre:element.genre,info:element}
-        if(containsObject(genreObject,temp2)) temp2.push(genreObject)
+        if(!containsObject(genreObject,temp2)) temp2.push(genreObject)
       });
       changeGenre(temp2);
       console.log(temp2);
@@ -45,14 +45,13 @@ function Genre() {
   }, []);
   return (
     <>
-      <div id="mainGenreContainer">
+      <div id="mainGenreContainer" style={{display:"flex",flexWrap:"wrap",justifyContent:"center"}} >
         {listGenre.map((element, i) => {
           return (
             <>
               <GenreItems
                 key={i}
                 Genre={element.genre}
-                info={element}
                 imgUrl={element.info.albumIMG}
               />
             </>

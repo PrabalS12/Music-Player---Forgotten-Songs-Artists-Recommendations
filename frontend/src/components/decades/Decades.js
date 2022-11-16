@@ -26,6 +26,8 @@ const years = [
 function Decades() {
   return (
     <>
+        <a href="./signup">Sign Up</a>
+        <a href="./login">Login Up</a>
       <div id="Main_Item_Container">
         {years.map((element, i) => {
           return (

@@ -1,39 +1,48 @@
-import {React,useEffect,useState} from "react";
+import { React, useState } from "react";
 
-  function createLink(id) {
-    window.open(`https://open.spotify.com/track/${id}`);
-  }
 function SongItems(props) {
-  const [recommenedList,newList] = useState([])
-  // useEffect(() => {
-  // }, [])
-  
+  const [recommenedList, newList] = useState([]);
+
   return (
     <>
       <div
-        className="songsContainer"
         name={props.decade}
-        onClick={async() => {
-          const data={"songsId":"4Ez7FfO3ex2NcpcEQorZXM"}
-          const response = await fetch("/getRecommendedSongs", {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: data
-          });
-          const s=await response.json()
-          console.log(s);
-        }}
+        style={{ display: "flex" }}
       >
-        <h3>Play</h3>
-        <h3>{props.songName}</h3>
-        <h3>{props.popu}</h3>
+        <p>{props.songName}</p>
+        <p>{props.popu}</p>
+        <button onClick={()=>{window.open("https://open.spotify.com/track/"+props.songId)}}>Listen Song</button>
+        <button
+          onClick={async () => {
+            const data = { songId: props.songId };
+            const response = await fetch("/getRecommendedSongs", {
+              method: "POST",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            });
+            const s = await response.json();
+            newList(s);
+            console.log(s);
+          }}
+        >
+          Get Recommened Songs
+        </button>
       </div>
-      <div>
-        Recommened Songs
-
+      <div id="recommendationContainer">
+          {recommenedList.map((element,i)=>{
+            return(
+              <>
+                <div key={i}>
+                    <p>element.songId</p>
+                    <p>element.popularity</p>
+                    <button onClick={()=>window.open("https://open.spotify.com/track/"+element.songId)}>Play Song</button>
+                </div>
+              </>
+            )
+          })}
       </div>
     </>
   );

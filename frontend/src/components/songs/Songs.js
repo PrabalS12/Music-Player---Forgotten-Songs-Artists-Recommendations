@@ -22,10 +22,10 @@ function Songs() {
           ArtistId: artist,
         }),
       });
-      let json = response;
+      let json = await response.json();
       temp = json;
       changeSongs(json);
-      // console.log(temp);
+      console.log(temp);
     }
     getInfo();
   }, []);

@@ -2,6 +2,7 @@ var express = require("express");
 var cors = require("cors");
 var mysql = require("mysql");
 var creds = require("../creds.json");
+const { request } = require("express");
 
 const app = express();
 const port = 8080;
@@ -55,4 +56,21 @@ app.post("/getSongs", (req, res) => {
   })
 });
 
+
+app.get("/getRecommendedSongs",async (req,res)=>{
+  console.log("working!!")
+  const data={"song_id":`${req.body.songId}`}
+  const url="http://localhost:9000/api"
+  const response = await fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  const s=await response.json()
+  console.log("working->"+s)
+  res.send(s);
+})
 app.listen(port, () => console.log("The application has started successfully"));

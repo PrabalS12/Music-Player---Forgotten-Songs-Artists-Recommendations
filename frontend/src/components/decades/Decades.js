@@ -22,10 +22,6 @@ const years = [
     decade: "T70s",
     imgUrl: "https://i.scdn.co/image/ab67706f00000003fbd00a8170cc83366f1a651a",
   },
-  {
-    decade: "retro",
-    imgUrl: "https://i.scdn.co/image/ab67706f000000036800079a717dd3dddee3c82e",
-  },
 ];
 function Decades() {
   return (

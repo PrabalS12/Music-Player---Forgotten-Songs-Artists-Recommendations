@@ -1,24 +1,39 @@
-import React from "react";
+import {React,useEffect,useState} from "react";
 
-function createLink(id){
+  function createLink(id) {
     window.open(`https://open.spotify.com/track/${id}`);
-}
+  }
 function SongItems(props) {
+  const [recommenedList,newList] = useState([])
+  // useEffect(() => {
+  // }, [])
+  
   return (
     <>
       <div
-        className="cardButton"
+        className="songsContainer"
         name={props.decade}
-        style={{ height: "15vw" }}
-        onClick={()=>{createLink(props.songId)}}
+        onClick={async() => {
+          const data={"songsId":"4Ez7FfO3ex2NcpcEQorZXM"}
+          const response = await fetch("/getRecommendedSongs", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: data
+          });
+          const s=await response.json()
+          console.log(s);
+        }}
       >
-        <div className="imageContainer">
-          <div src={props.imgUrl} className="imageClass" alt={props.decade} style={{display:"flex",flexDirection:"column",justifyContent:"center"}}>
-            <h3>Play</h3>
-            <h3>{props.songName}</h3>
-            <h3>{props.popu}</h3>
-          </div>
-        </div>
+        <h3>Play</h3>
+        <h3>{props.songName}</h3>
+        <h3>{props.popu}</h3>
+      </div>
+      <div>
+        Recommened Songs
+
       </div>
     </>
   );

@@ -22,17 +22,17 @@ function Songs() {
           ArtistId: artist,
         }),
       });
-      let json = await response.json();
+      let json = response;
       temp = json;
-      changeSongs(temp);
-      console.log(temp);
+      changeSongs(json);
+      // console.log(temp);
     }
     getInfo();
   }, []);
   return (
     <>
       <div
-        id="mainGenreContainer"
+        id="mainSongContainer"
         style={{
           display: "flex",
           flexWrap: "wrap",
